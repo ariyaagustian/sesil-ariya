@@ -483,6 +483,20 @@
       URL.revokeObjectURL(url);
     }
 
+    // ====== WISHES (LocalStorage) ======
+    function renderWishes(list){
+      const wrap = qs('#wishList');
+      wrap.innerHTML = '';
+      list.slice(-50).reverse().forEach(item=>{
+        const el = document.createElement('div');
+        el.className = 'border border-base-200 rounded-xl p-4 bg-white/70 backdrop-blur';
+        el.innerHTML = `<div class="text-sm text-base-500">${new Date(item.ts).toLocaleString('id-ID')}</div>
+                        <div class="mt-1 font-semibold">${item.name}</div>
+                        <div class="mt-1">${item.msg}</div>`;
+        wrap.appendChild(el);
+      })
+    }
+
     // ====== GALLERY LIGHTBOX ======
     function initLightbox(){
       const imgs = qsa('.gallery-img');
