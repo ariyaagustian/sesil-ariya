@@ -303,48 +303,6 @@
 
   <!-- ================== SCRIPT ================== -->
   <script>
-
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzk1w816loQflAzSta5GElzUrPcyF-Ie8IDxdjBAsdOYV6vLSeX5BzAmy8__584uKoXDw/exec'; // ganti dengan URL Web App
-
-    // JSONP helper
-    function jsonp(url, params={}, cbName){
-      const cb = cbName || ('cb_' + Math.random().toString(36).slice(2));
-      return new Promise((resolve) => {
-        window[cb] = (data) => {
-          resolve(data);
-          delete window[cb];
-          s.remove();
-        };
-        const q = new URLSearchParams({...params, callback: cb}).toString();
-        const s = document.createElement('script');
-        s.src = `${url}?${q}`;
-        document.body.appendChild(s);
-      });
-    }
-
-    async function loadWishes(){
-      const list = await jsonp(GAS_URL);      // GET (read)
-      renderWishes(list);
-    }
-
-    async function submitWish(e){
-      e.preventDefault();
-      const name = qs('#wishName').value.trim();
-      const msg  = qs('#wishMsg').value.trim();
-      if(!name || !msg) return;
-
-      // “tulis via GET” (JSONP)
-      const res = await jsonp(GAS_URL, { action:'add', name, msg, ts: Date.now() });
-      if (res && res.ok){
-        qs('#wishForm').reset();
-        showToast?.('Ucapan berhasil dikirim!');
-        loadWishes();
-      } else {
-        showToast?.('Gagal kirim. Coba lagi 🙏');
-      }
-    }
-
-
     // ====== KONFIGURASI ======
     const DISABLE_MUSIC = false; // Musik dimatikan sementara
     const config = {
@@ -483,6 +441,10 @@
     }
 
     // ====== WISHES (LocalStorage) ======
+    function loadWishes(){
+      const list = JSON.parse(localStorage.getItem('wishes')||'[]');
+      renderWishes(list);
+    }
     function renderWishes(list){
       const wrap = qs('#wishList');
       wrap.innerHTML = '';
@@ -494,6 +456,16 @@
                         <div class="mt-1">${item.msg}</div>`;
         wrap.appendChild(el);
       })
+    }
+    function submitWish(e){
+      e.preventDefault();
+      const name = qs('#wishName').value.trim();
+      const msg = qs('#wishMsg').value.trim();
+      if(!name || !msg) return;
+      const item = { name, msg, ts: Date.now() };
+      const list = JSON.parse(localStorage.getItem('wishes')||'[]');
+      list.push(item); localStorage.setItem('wishes', JSON.stringify(list));
+      qs('#wishForm').reset(); renderWishes(list);
     }
 
     // ====== GALLERY LIGHTBOX ======
