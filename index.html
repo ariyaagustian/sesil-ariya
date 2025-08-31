@@ -67,7 +67,7 @@
   <!-- ================== AUDIO / BACKSOUND ================== -->
   <audio id="bgm" loop preload="auto" crossorigin="anonymous">
     <!-- Ganti URL ini dengan lagu Anda (format .mp3) -->
-    <source src="https://cdn.pixabay.com/download/audio/2022/10/18/audio_bac8b1c5f9.mp3?filename=piano-ambient-124008.mp3" type="audio/mpeg">
+    <source src="/public/assets/sampai jadi debu.mp4" type="audio/mpeg">
   </audio>
 
   <!-- Tombol musik floating -->
@@ -101,7 +101,7 @@
       <div class="mt-10 md:mt-14 aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-2xl border border-base-200 shadow-soft">
         <!-- Video opsional (silent); fallback ke gambar -->
         <video id="coverVideo" class="hidden md:block w-full h-full object-cover" playsinline muted loop preload="auto" crossorigin="anonymous">
-          <source src="https://videos.pexels.com/video-files/856680/856680-uhd_2560_1440_25fps.mp4" type="video/mp4">
+          <source src="/public/assets/wedding-video.mp4" type="video/mp4">
         </video>
         <img id="coverImage" alt="Cover" class="block md:hidden w-full h-full object-cover" src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop"/>
       </div>
@@ -150,7 +150,7 @@
           <p id="saveVenueText" class="mt-1 text-base-600">The Monochrome Hall, Jakarta</p>
           <div class="mt-6 flex flex-wrap gap-3">
             <button id="addCalendarBtn" class="px-5 py-3 rounded-full bg-base-900 text-base-50 hover:bg-base-800 text-sm">Tambah ke Kalender (.ics)</button>
-            <a id="mapBtn" target="_blank" rel="noopener" class="px-5 py-3 rounded-full border border-base-300 hover:bg-base-100 text-sm" href="https://maps.google.com?q=The+Monochrome+Hall+Jakarta">Lihat Peta</a>
+            <a id="mapBtn" target="_blank" rel="noopener" class="px-5 py-3 rounded-full border border-base-300 hover:bg-base-100 text-sm" href="https://maps.google.com?q=Bale+Kinasih+Sukabumi">Lihat Peta</a>
           </div>
         </div>
         <div class="rounded-2xl overflow-hidden border border-base-200 shadow-soft">
@@ -171,8 +171,8 @@
         <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=800&auto=format&fit=crop" alt="galeri 2"/>
         <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=800&auto=format&fit=crop" alt="galeri 3"/>
         <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=800&auto=format&fit=crop" alt="galeri 4"/>
-        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1522673607200-bbe3f34bb08c?q=80&w=800&auto=format&fit=crop" alt="galeri 5"/>
-        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1521335629791-ce4aec67dd53?q=80&w=800&auto=format&fit=crop" alt="galeri 6"/>
+        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 5"/>
+        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 6"/>
       </div>
     </div>
   </section>
@@ -215,11 +215,11 @@
     // ====== KONFIGURASI ======
     const DISABLE_MUSIC = true; // Musik dimatikan sementara
     const config = {
-      coupleName: 'A & B',
-      dateISO: '2025-12-20T10:00:00+07:00', // Waktu acara (WIB)
-      venue: 'The Monochrome Hall, Jakarta',
-      city: 'Jakarta',
-      mapQuery: 'The+Monochrome+Hall+Jakarta',
+      coupleName: 'Sesil & Ariya',
+      dateISO: '2026-04-05T10:00:00+07:00', // Waktu acara (WIB)
+      venue: 'Bale Kinasih, Sukabumi',
+      city: 'Sukabumi',
+      mapQuery: 'Bale Kinasih Sukabumi',
       assetsToPreload: [
         'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop',
         'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop',
