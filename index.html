@@ -332,7 +332,6 @@
         if (p && typeof p.catch === 'function') p.catch(()=>{});
         qs('#musicToggle').classList.remove('hidden');
       }
-      qs('#splash').classList.add('hidden');
       // Mulai video cover pada desktop
       const v = qs('#coverVideo');
       if(v){ v.play && v.play().catch(()=>{}); }
