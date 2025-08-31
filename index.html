@@ -304,18 +304,27 @@
   <!-- ================== SCRIPT ================== -->
   <script>
 
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzk1w816loQflAzSta5GElzUrPcyF-Ie8IDxdjBAsdOYV6vLSeX5BzAmy8__584uKoXDw/exec'; // ganti dengan URL Web App
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzk1w816loQflAzSta5GElzUrPcyF-Ie8IDxdjBAsdOYV6vLSeX5BzAmy8__584uKoXDw/exec'; // ganti dengan URL Web App
+
+    // JSONP helper
+    function jsonp(url, params={}, cbName){
+      const cb = cbName || ('cb_' + Math.random().toString(36).slice(2));
+      return new Promise((resolve) => {
+        window[cb] = (data) => {
+          resolve(data);
+          delete window[cb];
+          s.remove();
+        };
+        const q = new URLSearchParams({...params, callback: cb}).toString();
+        const s = document.createElement('script');
+        s.src = `${url}?${q}`;
+        document.body.appendChild(s);
+      });
+    }
 
     async function loadWishes(){
-      try {
-        const res = await fetch(API_URL, { method: 'GET' });
-        const list = await res.json();
-        renderWishes(list); // pastikan renderWishes pakai textContent, bukan innerHTML
-      } catch (e) {
-        // fallback local kalau perlu
-        const list = JSON.parse(localStorage.getItem('wishes')||'[]').reverse().slice(0,100);
-        renderWishes(list);
-      }
+      const list = await jsonp(GAS_URL);      // GET (read)
+      renderWishes(list);
     }
 
     async function submitWish(e){
@@ -324,22 +333,14 @@
       const msg  = qs('#wishMsg').value.trim();
       if(!name || !msg) return;
 
-      const payload = { name, msg, ts: Date.now() };
-
-      try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify(payload),
-        });
-        const data = await res.json();
-        if(!data.ok) throw new Error(data.error || 'Gagal simpan');
-
+      // “tulis via GET” (JSONP)
+      const res = await jsonp(GAS_URL, { action:'add', name, msg, ts: Date.now() });
+      if (res && res.ok){
         qs('#wishForm').reset();
-        if (typeof showToast === 'function') showToast('Ucapan berhasil dikirim!');
-        loadWishes(); // refresh
-      } catch (err) {
-        if (typeof showToast === 'function') showToast('Gagal kirim. Coba lagi 🙏');
+        showToast?.('Ucapan berhasil dikirim!');
+        loadWishes();
+      } else {
+        showToast?.('Gagal kirim. Coba lagi 🙏');
       }
     }
 
