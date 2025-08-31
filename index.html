@@ -50,9 +50,25 @@
         transform: translateY(0);
       }
     }
-    .splash-inner {
-      animation: slideUpFade 1s ease-out forwards;
+
+    @keyframes slideUpFadeIn {
+      0% { opacity: 0; transform: translateY(50px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes slideUpFadeOut {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-50px); }
+    }
+
+    .splash-inner {
+      animation: slideUpFadeIn 1s ease-out forwards;
+    }
+
+    .splash-hide {
+      animation: slideUpFadeOut 0.8s ease-in forwards;
+    }
+
   </style>
 </head>
 <body class="font-ovo text-base-900 bg-base-50">
@@ -302,6 +318,13 @@
 
     // ====== OPEN INVITATION ======
     function handleOpen(){
+      const splash = document.querySelector('#splash');
+      // kasih animasi keluar
+      splash.classList.add('splash-hide');
+
+      // tunggu animasi selesai lalu benar-benar sembunyikan
+      setTimeout(()=> splash.style.display = 'none', 800);
+      
       const audio = qs('#bgm');
       // Musik dimatikan sementara agar tidak bikin macet
       if (!DISABLE_MUSIC) {
@@ -313,6 +336,7 @@
       // Mulai video cover pada desktop
       const v = qs('#coverVideo');
       if(v){ v.play && v.play().catch(()=>{}); }
+
     }
 
     // ====== COUNTDOWN ======
