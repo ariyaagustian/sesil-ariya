@@ -40,8 +40,6 @@
       background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix><feComponentTransfer><feFuncA type="table" tableValues="0 0.05"></feFuncA></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
       opacity: .2; pointer-events: none; mix-blend-mode: multiply;
     }
-    .fade-enter { opacity: 0; transform: translateY(10px); }
-    .fade-enter-active { transition: all .7s ease; opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body class="font-ovo text-base-900 bg-base-50">
@@ -58,16 +56,16 @@
         <div id="progressBar" class="h-full w-0 bg-base-300 transition-all"></div>
       </div>
       <p id="progressText" class="mt-3 text-sm text-base-300">Menyiapkan kenangan… 0%</p>
-      <button id="openBtn" class="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full border border-base-300 text-base-50 hover:bg-base-800 disabled:opacity-40 disabled:cursor-not-allowed">
+      <button id="openBtn" class="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full border border-base-300 text-base-50 hover:bg-base-800">
         Buka Undangan
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3"/></svg>
       </button>
-      <p class="mt-3 text-xs text-base-400">Klik “Buka Undangan” untuk memutar musik.</p>
+      <p class="mt-3 text-xs text-base-400">(Musik dimatikan sementara untuk mencegah halaman macet)</p>
     </div>
   </div>
 
   <!-- ================== AUDIO / BACKSOUND ================== -->
-  <audio id="bgm" loop preload="auto">
+  <audio id="bgm" loop preload="auto" crossorigin="anonymous">
     <!-- Ganti URL ini dengan lagu Anda (format .mp3) -->
     <source src="https://cdn.pixabay.com/download/audio/2022/10/18/audio_bac8b1c5f9.mp3?filename=piano-ambient-124008.mp3" type="audio/mpeg">
   </audio>
@@ -102,7 +100,7 @@
       <!-- Cover visual -->
       <div class="mt-10 md:mt-14 aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-2xl border border-base-200 shadow-soft">
         <!-- Video opsional (silent); fallback ke gambar -->
-        <video id="coverVideo" class="hidden md:block w-full h-full object-cover" playsinline muted loop preload="auto">
+        <video id="coverVideo" class="hidden md:block w-full h-full object-cover" playsinline muted loop preload="auto" crossorigin="anonymous">
           <source src="https://videos.pexels.com/video-files/856680/856680-uhd_2560_1440_25fps.mp4" type="video/mp4">
         </video>
         <img id="coverImage" alt="Cover" class="block md:hidden w-full h-full object-cover" src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop"/>
@@ -214,7 +212,8 @@
 
   <!-- ================== SCRIPT ================== -->
   <script>
-    // ====== DATA DASAR (mudah disesuaikan) ======
+    // ====== KONFIGURASI ======
+    const DISABLE_MUSIC = true; // Musik dimatikan sementara
     const config = {
       coupleName: 'A & B',
       dateISO: '2025-12-20T10:00:00+07:00', // Waktu acara (WIB)
@@ -258,15 +257,15 @@
       }
     }
 
-    // ====== PRELOADER ======
+    // ====== PRELOADER (non-blocking) ======
     function preloadAssets(urls){
       let loaded = 0;
       const total = urls.length;
       const bar = qs('#progressBar');
       const text = qs('#progressText');
       return Promise.all(urls.map(url => new Promise(resolve=>{
-        const isVideo = url.match(/\.mp4|\.webm|\.ogg/i);
-        const isAudio = url.match(/\.mp3|\.wav|\.ogg/i);
+        const isVideo = /\.(mp4|webm|ogg)$/i.test(url);
+        const isAudio = /\.(mp3|wav|ogg)$/i.test(url);
         if(isVideo){
           const v = document.createElement('video');
           v.src = url; v.preload = 'auto';
@@ -281,22 +280,26 @@
         }
         function done(){
           loaded++; const pct = Math.round(loaded/total*100);
-          bar.style.width = pct + '%';
-          text.textContent = `Menyiapkan kenangan… ${pct}%`;
+          if(bar) bar.style.width = pct + '%';
+          if(text) text.textContent = `Menyiapkan kenangan… ${pct}%`;
           resolve();
         }
       })))
     }
 
-    // ====== OPEN INVITATION (play music) ======
-    async function handleOpen(){
+    // ====== OPEN INVITATION ======
+    function handleOpen(){
       const audio = qs('#bgm');
-      try { await audio.play(); } catch(e) { /* jika gagal, tombol toggle tersedia */ }
-      qs('#musicToggle').classList.remove('hidden');
+      // Musik dimatikan sementara agar tidak bikin macet
+      if (!DISABLE_MUSIC) {
+        const p = audio.play();
+        if (p && typeof p.catch === 'function') p.catch(()=>{});
+        qs('#musicToggle').classList.remove('hidden');
+      }
       qs('#splash').classList.add('hidden');
       // Mulai video cover pada desktop
       const v = qs('#coverVideo');
-      if(v){ v.play().catch(()=>{}); }
+      if(v){ v.play && v.play().catch(()=>{}); }
     }
 
     // ====== COUNTDOWN ======
@@ -378,24 +381,26 @@
       const btn = qs('#musicToggle');
       const audio = qs('#bgm');
       btn.addEventListener('click', ()=>{
-        if(audio.paused){ audio.play(); btn.textContent = '♬ Pause'; }
+        if(audio.paused){ audio.play().catch(()=>{}); btn.textContent = '♬ Pause'; }
         else { audio.pause(); btn.textContent = '♬ Play'; }
       })
     }
 
     // ====== BOOT ======
-    window.addEventListener('DOMContentLoaded', async ()=>{
+    window.addEventListener('DOMContentLoaded', ()=>{
       applyTexts();
       initLightbox();
       initMusicToggle();
       loadWishes();
       startCountdown();
 
-      // Preload assets, lalu aktifkan tombol Buka
-      await preloadAssets(config.assetsToPreload).catch(()=>{});
+      // Tombol open selalu siap (tidak menunggu preload)
       const openBtn = qs('#openBtn');
-      openBtn.disabled = false;
       openBtn.addEventListener('click', handleOpen);
+
+      // Preload aset tanpa menghalangi interaksi (race dengan timeout)
+      const preloadTimeout = new Promise(r => setTimeout(r, 3500));
+      Promise.race([preloadAssets(config.assetsToPreload), preloadTimeout]).catch(()=>{});
 
       // Form wishes
       qs('#wishForm').addEventListener('submit', submitWish);
