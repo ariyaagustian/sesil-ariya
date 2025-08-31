@@ -78,7 +78,7 @@
     <div class="splash-inner text-center px-8">
       <div class="mb-8">
         <h1 class="text-3xl md:text-5xl tracking-wide">The Wedding of</h1>
-        <p id="coupleNameSplash" class="mt-2 text-xl md:text-2xl">Sesil & Ariya</p>
+        <p id="coupleNameSplash" class="mt-2 text-xl md:text-3xl">Sesil & Ariya</p>
         <p id="guestNameSplash" class="mt-2 text-base text-base-300"></p>
       </div>
       <div class="w-64 h-1 bg-base-700 rounded-full overflow-hidden mx-auto">
@@ -124,7 +124,7 @@
       <p class="uppercase tracking-[0.35em] text-xs md:text-sm text-base-400">Undangan Pernikahan</p>
       <h2 id="coupleName" class="mt-4 text-4xl md:text-6xl">Sesil & Ariya</h2>
       <p id="weddingDateText" class="mt-1 text-base md:text-lg">Sabtu, 20 Desember 2025 · Jakarta</p>
-      <p class="mt-1 text-base-600">Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada acara pernikahan kami.</p>
+      <p class="mt-3 text-sm md:text-sm text-base-500">Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada acara pernikahan kami.</p>
 
       <!-- Cover visual -->
       <div class="mt-10 md:mt-14 aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-2xl border border-base-200 shadow-soft">
@@ -147,8 +147,8 @@
   <section id="doa-restu" class="relative">
     <div class="mx-auto max-w-5xl px-4 pb-16 md:pb-24 text-center">
       <!-- Ayat suci Al Quran (QS. Ar Ruum 21)  -->
-      <p class="text-base-600">وَمِنۡ ءَايَٰتِهِۦٓ أَنۡ خَلَقَ لَكُم مِّنۡ أَنفُسِكُمۡ أَزۡوَٰجٗا لِّتَسۡكُنُوٓاْ إِلَيۡهَا وَجَعَلَ بَيۡنَكُم مَّوَدَّةٗ وَرَحۡمَةًۚ إِنَّ فِي ذَٰلِكَ لَأٓيَٰتٖ لِّقَوۡمٖ يَتَفَكَّرُونَ</p>
-      <p class="italic text-base-600">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berpikir."</p>
+      <p class="text-base-500">وَمِنۡ ءَايَٰتِهِۦٓ أَنۡ خَلَقَ لَكُم مِّنۡ أَنفُسِكُمۡ أَزۡوَٰجٗا لِّتَسۡكُنُوٓاْ إِلَيۡهَا وَجَعَلَ بَيۡنَكُم مَّوَدَّةٗ وَرَحۡمَةًۚ إِنَّ فِي ذَٰلِكَ لَأٓيَٰتٖ لِّقَوۡمٖ يَتَفَكَّرُونَ</p>
+      <p class="mt-2 italic text-xs md:text-sm text-base-500">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berpikir."</p>
     </div>
   </section>
 
@@ -432,7 +432,7 @@
       const d = new Date(config.dateISO);
       const dtStart = d.toISOString().replace(/[-:]/g,'').split('.')[0];
       const dtEnd = new Date(d.getTime()+2*60*60*1000).toISOString().replace(/[-:]/g,'').split('.')[0];
-      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Timeless Monochrome//ID\nBEGIN:VEVENT\nUID:${Date.now()}@timeless\nDTSTAMP:${dtStart}Z\nDTSTART:${dtStart}Z\nDTEND:${dtEnd}Z\nSUMMARY:Pernikahan ${config.coupleName}\nLOCATION:${config.venue}\nDESCRIPTION:Merayakan hari bahagia ${config.coupleName}.\nEND:VEVENT\nEND:VCALENDAR`;
+      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Undangan Pernikahan//ID\nBEGIN:VEVENT\nUID:${Date.now()}@Sesil&Ariya\nDTSTAMP:${dtStart}Z\nDTSTART:${dtStart}Z\nDTEND:${dtEnd}Z\nSUMMARY:Pernikahan ${config.coupleName}\nLOCATION:${config.venue}\nDESCRIPTION:Merayakan hari bahagia ${config.coupleName}.\nEND:VEVENT\nEND:VCALENDAR`;
       const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
