@@ -301,8 +301,51 @@
     Nomor rekening berhasil disalin!
   </div>
 
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzk1w816loQflAzSta5GElzUrPcyF-Ie8IDxdjBAsdOYV6vLSeX5BzAmy8__584uKoXDw/exec'; // ganti dengan URL Web App
+  </script>
+
   <!-- ================== SCRIPT ================== -->
   <script>
+
+    async function loadWishes(){
+      try {
+        const res = await fetch(API_URL, { method: 'GET' });
+        const list = await res.json();
+        renderWishes(list); // pastikan renderWishes pakai textContent, bukan innerHTML
+      } catch (e) {
+        // fallback local kalau perlu
+        const list = JSON.parse(localStorage.getItem('wishes')||'[]').reverse().slice(0,100);
+        renderWishes(list);
+      }
+    }
+
+    async function submitWish(e){
+      e.preventDefault();
+      const name = qs('#wishName').value.trim();
+      const msg  = qs('#wishMsg').value.trim();
+      if(!name || !msg) return;
+
+      const payload = { name, msg, ts: Date.now() };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if(!data.ok) throw new Error(data.error || 'Gagal simpan');
+
+        qs('#wishForm').reset();
+        if (typeof showToast === 'function') showToast('Ucapan berhasil dikirim!');
+        loadWishes(); // refresh
+      } catch (err) {
+        if (typeof showToast === 'function') showToast('Gagal kirim. Coba lagi 🙏');
+      }
+    }
+
+
     // ====== KONFIGURASI ======
     const DISABLE_MUSIC = false; // Musik dimatikan sementara
     const config = {
@@ -456,16 +499,6 @@
                         <div class="mt-1">${item.msg}</div>`;
         wrap.appendChild(el);
       })
-    }
-    function submitWish(e){
-      e.preventDefault();
-      const name = qs('#wishName').value.trim();
-      const msg = qs('#wishMsg').value.trim();
-      if(!name || !msg) return;
-      const item = { name, msg, ts: Date.now() };
-      const list = JSON.parse(localStorage.getItem('wishes')||'[]');
-      list.push(item); localStorage.setItem('wishes', JSON.stringify(list));
-      qs('#wishForm').reset(); renderWishes(list);
     }
 
     // ====== GALLERY LIGHTBOX ======
