@@ -74,6 +74,20 @@
       animation: slideUpFadeOut 0.8s ease-in forwards;
     }
 
+    #wishList {
+      max-height: 400px;       /* atur sesuai kebutuhan */
+      overflow-y: auto;
+      scrollbar-width: thin;   /* Firefox */
+    }
+
+    #wishList::-webkit-scrollbar {
+      width: 6px;
+    }
+    #wishList::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+    }
+
   </style>
 </head>
 <body class="font-ovo text-base-900 bg-base-50">
@@ -272,7 +286,7 @@
         </div>
       </form>
 
-      <div id="wishList" class="mt-8 space-y-4">
+      <div id="wishList" class="mt-8 space-y-4 max-h-96 overflow-y-auto pr-2">
         <!-- Pesan tampil di sini -->
       </div>
     </div>
@@ -324,6 +338,11 @@
 
   <!-- ================== SCRIPT ================== -->
   <script>
+
+    // ========== CONFIG ==========
+    const WEBHOOK_BASE = 'https://n8n.salam-homecare.com/webhook';
+    const WISHES_ENDPOINT = `${WEBHOOK_BASE}/88b433aa-dcca-4e9a-b990-a72fed919ca2/doa-pesan`; // GET & POST endpoint yang kita buat di n8n
+
     // ====== KONFIGURASI ======
     const DISABLE_MUSIC = false; // Musik dimatikan sementara
     const config = {
@@ -460,31 +479,87 @@
     }
 
     // ====== WISHES (LocalStorage) ======
-    function loadWishes(){
-      const list = JSON.parse(localStorage.getItem('wishes')||'[]');
-      renderWishes(list);
+    // ========== WISHES (GET dari n8n + fallback localStorage) ==========
+    async function loadWishes() {
+      try {
+        const res = await fetch(WISHES_ENDPOINT, { method: 'GET' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        // Payload = array langsung
+        const rows = await res.json();
+
+        const list = rows.map(r => ({
+          ts: Date.parse(r.timestamp) || Date.now(),
+          name: r.name ?? '',
+          msg:  r.message ?? ''
+        }));
+
+        localStorage.setItem('wishes_cache', JSON.stringify(list));
+        renderWishes(list);
+      } catch (err) {
+        console.warn('loadWishes error:', err);
+        localStorage.setItem('wishes_cache', JSON.stringify([]));
+        const cached = JSON.parse(localStorage.getItem('wishes_cache') || '[]');
+        renderWishes(cached);
+      }
     }
+
+
     function renderWishes(list){
       const wrap = qs('#wishList');
+      if (!wrap) return;
       wrap.innerHTML = '';
       list.slice(-50).reverse().forEach(item=>{
         const el = document.createElement('div');
         el.className = 'border border-base-200 rounded-xl p-4 bg-white/70 backdrop-blur';
-        el.innerHTML = `<div class="text-sm text-base-500">${new Date(item.ts).toLocaleString('id-ID')}</div>
-                        <div class="mt-1 font-semibold">${item.name}</div>
-                        <div class="mt-1">${item.msg}</div>`;
+        el.innerHTML = `
+          <div class="text-sm text-base-500">${new Date(item.ts).toLocaleString('id-ID')}</div>
+          <div class="mt-1 font-semibold">${item.name}</div>
+          <div class="mt-1">${item.msg}</div>`;
         wrap.appendChild(el);
-      })
+      });
     }
-    function submitWish(e){
+
+
+    // ========== WISHES (POST ke n8n + fallback localStorage) ==========
+    let lastSubmitAt = 0;
+    async function submitWish(e){
       e.preventDefault();
-      const name = qs('#wishName').value.trim();
-      const msg = qs('#wishMsg').value.trim();
+      const name = qs('#wishName')?.value.trim();
+      const msg  = qs('#wishMsg')?.value.trim();
       if(!name || !msg) return;
-      const item = { name, msg, ts: Date.now() };
-      const list = JSON.parse(localStorage.getItem('wishes')||'[]');
-      list.push(item); localStorage.setItem('wishes', JSON.stringify(list));
-      qs('#wishForm').reset(); renderWishes(list);
+
+      // Anti-spam sederhana (5 detik)
+      const now = Date.now();
+      if (now - lastSubmitAt < 5000) return;
+      lastSubmitAt = now;
+
+      // Optimistic UI
+      const optimistic = { name, msg, ts: now };
+      const current = JSON.parse(localStorage.getItem('wishes_cache')||'[]');
+      const next = [...current, optimistic];
+      renderWishes(next);
+
+      try {
+        const res = await fetch(WISHES_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify({ name, message: msg })
+        });
+        const data = await res.json().catch(()=>({}));
+        if (!res.ok || data?.ok === false) throw new Error(data?.message || 'Gagal menyimpan');
+
+        // Sinkronkan cache dari server (opsional, di sini cukup update lokal)
+        localStorage.setItem('wishes_cache', JSON.stringify(next));
+        qs('#wishForm')?.reset();
+        showToast('Terima kasih, pesan terkirim!');
+      } catch (err) {
+        // Fallback: simpan lokal bila jaringan/n8n error
+        const local = JSON.parse(localStorage.getItem('wishes_offline')||'[]');
+        local.push(optimistic);
+        localStorage.setItem('wishes_offline', JSON.stringify(local));
+        showToast('Pesan disimpan sementara (offline). Akan terkirim saat online.');
+      }
     }
 
     // ====== GALLERY LIGHTBOX ======
