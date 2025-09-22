@@ -372,6 +372,7 @@
     const config = {
       coupleName: 'Sesil & Ariya',
       dateISO: '2026-04-05T11:00:00+07:00', // Waktu acara (WIB)
+      dateISOEndTime: '2026-04-05T14:00:00+07:00', // Waktu acara (WIB)
       dateISOAkad: '2026-04-05T08:00:00+07:00', // Waktu resepsi (WIB), opsional
       venue: 'Gedung Auditorium BBPBAT, Sukabumi',
       city: 'Sukabumi',
@@ -404,7 +405,7 @@
       qs('#saveDateText').innerHTML = `
         ${formatDateLong(config.dateISO)} <br/>
         ${new Date(config.dateISOAkad).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} WIB (Akad) <br/>
-        ${new Date(config.dateISO).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} WIB (Resepsi)
+        ${new Date(config.dateISO).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} - ${new Date(config.dateISOEndTime).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} WIB (Resepsi) 
       `;
       qs('#saveVenueText').textContent = config.venue;
       qs('#mapBtn').href = `https://maps.google.com?q=${config.mapQuery}`;
