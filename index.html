@@ -584,7 +584,7 @@
     function downloadICS(){
       const d = new Date(config.dateISO);
       const dtStart = d.toISOString().replace(/[-:]/g,'').split('.')[0];
-      const dtEnd = new Date(d.getTime()+2*60*60*1000).toISOString().replace(/[-:]/g,'').split('.')[0];
+      const dtEnd = new Date(d.getTime()+3*60*60*1000).toISOString().replace(/[-:]/g,'').split('.')[0];
       const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Undangan Pernikahan//ID\nBEGIN:VEVENT\nUID:${Date.now()}@Sesil&Ariya\nDTSTAMP:${dtStart}Z\nDTSTART:${dtStart}Z\nDTEND:${dtEnd}Z\nSUMMARY:Pernikahan ${config.coupleName}\nLOCATION:${config.venue}\nDESCRIPTION:Merayakan hari bahagia ${config.coupleName}.\nEND:VEVENT\nEND:VCALENDAR`;
       const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
       const url = URL.createObjectURL(blob);
