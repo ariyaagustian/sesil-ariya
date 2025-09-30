@@ -90,6 +90,37 @@
       border-radius: 4px;
     }
 
+    [data-animate] {
+      --reveal-x: 0px;
+      --reveal-y: 40px;
+      --reveal-rotate: 0deg;
+      --reveal-scale: .98;
+      opacity: 0;
+      transform: translate3d(var(--reveal-x), var(--reveal-y), 0) scale(var(--reveal-scale)) rotate(var(--reveal-rotate));
+      transition: opacity .9s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    [data-animate].reveal-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    }
+
+    [data-animate="fade-right"] { --reveal-x: 50px; --reveal-y: 0; }
+    [data-animate="fade-left"] { --reveal-x: -50px; --reveal-y: 0; }
+    [data-animate="fade-down"] { --reveal-y: -40px; }
+    [data-animate="zoom-in"] { --reveal-scale: .9; }
+    [data-animate="rise"] { --reveal-y: 60px; }
+    [data-animate="float"] { --reveal-y: 30px; --reveal-scale: .96; }
+
+    @media (prefers-reduced-motion: reduce) {
+      [data-animate] {
+        transition-duration: 0s;
+        transform: none;
+        opacity: 1;
+      }
+    }
+
   </style>
 </head>
 <body class="font-ovo text-base-900 bg-base-50">
@@ -126,12 +157,12 @@
   </audio>
 
   <!-- Tombol musik floating -->
-  <button id="musicToggle" class="hidden fixed bottom-4 right-4 z-40 rounded-full border border-base-300 bg-white/70 backdrop-blur px-4 py-2 text-sm shadow-soft hover:bg-white">
+  <button id="musicToggle" class="hidden fixed bottom-16 left-4 z-40 rounded-full border border-base-300 bg-white/70 backdrop-blur px-4 py-2 text-sm shadow-soft hover:bg-white">
     ♬ Pause
   </button>
 
   <!-- ================== NAV (Sticky minimal) ================== -->
-  <header class="fixed top-0 left-0 right-0 z-30 bg-white/70 backdrop-blur border-b border-base-200">
+  <header data-animate="fade-down" data-delay="0.15s" class="fixed top-0 left-0 right-0 z-30 bg-white/70 backdrop-blur border-b border-base-200">
     <div class="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
       <a href="#intro" class="tracking-wide">
         <!-- Add Image Logo -->
@@ -153,7 +184,7 @@
   <!-- ================== HERO / INTRO ================== -->
   <section id="intro" class="relative pt-24">
     <div class="absolute inset-0 -z-10 grain"></div>
-    <div class="mx-auto max-w-5xl px-4 py-16 md:py-24 text-center">
+    <div data-animate="rise" class="mx-auto max-w-5xl px-4 py-16 md:py-24 text-center">
       <!-- Add Image Logo -->
       <!-- Change color logo to white -->
       <img class="mx-auto h-24 w-24 md:h-32 md:w-32 object-contain" src="public/assets/S&A Logo.png" alt="Logo" />
@@ -163,7 +194,7 @@
       <p class="mt-3 text-sm md:text-sm text-base-500">Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada acara pernikahan kami.</p>
 
       <!-- Cover visual -->
-      <div class="mt-10 md:mt-14 aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-2xl border border-base-200 shadow-soft">
+      <div data-animate="float" data-delay="0.15s" class="mt-10 md:mt-14 aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-2xl border border-base-200 shadow-soft">
         <!-- Video sekarang jalan di semua device -->
         <video id="coverVideo" class="w-full h-full object-cover" playsinline muted loop autoplay preload="auto" crossorigin="anonymous">
           <source src="public/assets/wedding-video.webm" type="video/webm">
@@ -172,8 +203,8 @@
         </video>
       </div>
 
-      <p id="guestNameHero" class="mt-8 text-sm text-base-500"></p>
-      <div class="mt-6 flex items-center justify-center gap-4">
+      <p id="guestNameHero" data-animate="fade-up" data-delay="0.25s" class="mt-8 text-sm text-base-500"></p>
+      <div data-animate="fade-up" data-delay="0.30s" class="mt-6 flex items-center justify-center gap-4">
         <a href="#countdown" class="px-5 py-3 rounded-full border border-base-300 hover:bg-base-100 text-sm">Lihat Hitung Mundur</a>
         <a href="#save" class="px-5 py-3 rounded-full bg-base-900 text-base-50 hover:bg-base-800 text-sm">Simpan Tanggal</a>
       </div>
@@ -181,7 +212,7 @@
   </section>
 
   <section id="doa-restu" class="relative">
-    <div class="mx-auto max-w-5xl px-4 pb-16 md:pb-24 text-center">
+    <div data-animate="fade-up" class="mx-auto max-w-5xl px-4 pb-16 md:pb-24 text-center">
       <!-- Ayat suci Al Quran (QS. Ar Ruum 21)  -->
       <p class="text-base-500">وَمِنۡ ءَايَٰتِهِۦٓ أَنۡ خَلَقَ لَكُم مِّنۡ أَنفُسِكُمۡ أَزۡوَٰجٗا لِّتَسۡكُنُوٓاْ إِلَيۡهَا وَجَعَلَ بَيۡنَكُم مَّوَدَّةٗ وَرَحۡمَةًۚ إِنَّ فِي ذَٰلِكَ لَأٓيَٰتٖ لِّقَوۡمٖ يَتَفَكَّرُونَ</p>
       <p class="mt-5 italic text-xs md:text-sm text-base-500">"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berpikir."</p>
@@ -192,22 +223,22 @@
   <!-- ================== COUNTDOWN ================== -->
   <section id="countdown" class="relative">
     <div class="mx-auto max-w-5xl px-4 py-16 md:py-24">
-      <h3 class="text-2xl md:text-3xl text-center">Menuju Hari Bahagia</h3>
-      <p class="text-center text-base-500 mt-2">Kami tak sabar merayakan bersama Anda</p>
-      <div class="mt-8 grid grid-cols-4 gap-3 md:gap-6 text-center">
-        <div class="rounded-xl border border-base-200 p-4 md:p-6">
+      <h3 data-animate="fade-up" class="text-2xl md:text-3xl text-center">Menuju Hari Bahagia</h3>
+      <p data-animate="fade-up" data-delay="0.10s" class="text-center text-base-500 mt-2">Kami tak sabar merayakan bersama Anda</p>
+      <div class="mt-8 grid grid-cols-4 gap-3 md:gap-6 text-center" data-animate-stagger="0.08">
+        <div data-animate="zoom-in" class="rounded-xl border border-base-200 p-4 md:p-6">
           <div id="dd" class="text-3xl md:text-5xl">00</div>
           <div class="mt-1 text-xs md:text-sm text-base-500">Hari</div>
         </div>
-        <div class="rounded-xl border border-base-200 p-4 md:p-6">
+        <div data-animate="zoom-in" class="rounded-xl border border-base-200 p-4 md:p-6">
           <div id="hh" class="text-3xl md:text-5xl">00</div>
           <div class="mt-1 text-xs md:text-sm text-base-500">Jam</div>
         </div>
-        <div class="rounded-xl border border-base-200 p-4 md:p-6">
+        <div data-animate="zoom-in" class="rounded-xl border border-base-200 p-4 md:p-6">
           <div id="mm" class="text-3xl md:text-5xl">00</div>
           <div class="mt-1 text-xs md:text-sm text-base-500">Menit</div>
         </div>
-        <div class="rounded-xl border border-base-200 p-4 md:p-6">
+        <div data-animate="zoom-in" class="rounded-xl border border-base-200 p-4 md:p-6">
           <div id="ss" class="text-3xl md:text-5xl">00</div>
           <div class="mt-1 text-xs md:text-sm text-base-500">Detik</div>
         </div>
@@ -218,11 +249,11 @@
 <!-- ================== PROFILE COUPLE ================== -->
   <section id="profile-couple" class="relative">
     <div class="mx-auto max-w-5xl px-4 py-16 md:py-24">
-      <div class="grid md:grid-cols-2 gap-8 items-center">
-        <div class="rounded-2xl overflow-hidden border border-base-200 shadow-soft">
+      <div class="grid md:grid-cols-2 gap-8 items-center" data-animate-stagger="0.12">
+        <div data-animate="fade-right" class="rounded-2xl overflow-hidden border border-base-200 shadow-soft">
           <img alt="Bride & Groom" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop"/>
         </div>
-        <div class="text-center md:text-left">
+        <div data-animate="fade-left" class="text-center md:text-left">
           <h3 class="text-2xl md:text-3xl">Tentang Kami</h3>
           <!-- Divider kecil -->
           <div class="my-4">
@@ -255,8 +286,8 @@
   <!-- ================== SAVE THE DATE ================== -->
   <section id="save" class="relative">
     <div class="mx-auto max-w-5xl px-4 py-16 md:py-24">
-      <div class="grid md:grid-cols-2 gap-8 items-center">
-        <div>
+      <div class="grid md:grid-cols-2 gap-8 items-center" data-animate-stagger="0.12">
+        <div data-animate="fade-right">
           <h3 class="text-xl md:text-3xl">Tanggal & Tempat Acara</h3>
           <p id="saveVenueText" class="mt-3 text-base-700">Gedung Auditorium BBPBAT, Sukabumi</p>
           <p id="saveDateText" class="mt-1 text-base-500">Minggu, 5 April 2026 · 11.00 WIB</p>
@@ -265,7 +296,7 @@
             <a id="mapBtn" target="_blank" rel="noopener" class="px-5 py-3 rounded-full border border-base-300 hover:bg-base-100 text-sm" href="https://maps.google.com?q=Gedung+Auditorium+BBPBAT">Lihat Peta</a>
           </div>
         </div>
-        <div class="rounded-2xl overflow-hidden border border-base-200 shadow-soft">
+        <div data-animate="float" data-delay="0.15s" class="rounded-2xl overflow-hidden border border-base-200 shadow-soft">
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.839955912496!2d106.93121677570625!3d-6.909732193089708!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6849caf6c6a9b9%3A0x6bff27d067a90702!2sGedung%20Auditorium%20BBPBAT!5e0!3m2!1sid!2sid!4v1757305961000!5m2!1sid!2sid" width="600" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           <!-- <img alt="Venue" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop"/> -->
         </div>
@@ -276,16 +307,16 @@
   <!-- ================== GALLERY ================== -->
   <section id="gallery" class="relative">
     <div class="mx-auto max-w-5xl px-4 py-16 md:py-24">
-      <h3 class="text-2xl md:text-3xl text-center">Galeri Foto</h3>
-      <p class="text-center text-base-500 mt-2">Potongan kisah kami</p>
-      <div id="galleryGrid" class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+      <h3 data-animate="fade-up" class="text-2xl md:text-3xl text-center">Galeri Foto</h3>
+      <p data-animate="fade-up" data-delay="0.08s" class="text-center text-base-500 mt-2">Potongan kisah kami</p>
+      <div id="galleryGrid" class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4" data-animate-stagger="0.06">
         <!-- Ganti sumber gambar sesuai kebutuhan -->
-        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 1"/>
-        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=800&auto=format&fit=crop" alt="galeri 2"/>
-        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=800&auto=format&fit=crop" alt="galeri 3"/>
-        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=800&auto=format&fit=crop" alt="galeri 4"/>
-        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 5"/>
-        <img class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 6"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 1"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=800&auto=format&fit=crop" alt="galeri 2"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=800&auto=format&fit=crop" alt="galeri 3"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=800&auto=format&fit=crop" alt="galeri 4"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 5"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 6"/>
       </div>
     </div>
   </section>
@@ -298,11 +329,11 @@
 
   <!-- ================== WISHES (Doa & Pesan) ================== -->
   <section id="wishes" class="relative">
-    <div class="mx-auto max-w-3xl px-4 py-16 md:py-24">
+    <div data-animate="fade-up" class="mx-auto max-w-3xl px-4 py-16 md:py-24">
       <h3 class="text-2xl md:text-3xl text-center">Doa & Pesan</h3>
       <p class="text-center text-base-500 mt-2">Tinggalkan ucapan untuk kami</p>
 
-      <form id="wishForm" class="mt-8 grid md:grid-cols-[1fr_auto] gap-3">
+      <form id="wishForm" data-animate="fade-up" data-delay="0.12s" class="mt-8 grid md:grid-cols-[1fr_auto] gap-3">
         <input id="wishName" type="text" placeholder="Nama Anda" class="w-full border border-base-300 rounded-xl px-4 py-3 bg-white/70 backdrop-blur" required />
         <div class="md:col-span-2 grid md:grid-cols-[1fr_auto] gap-3">
           <input id="wishMsg" type="text" placeholder="Tulis doa & pesan…" class="w-full border border-base-300 rounded-xl px-4 py-3 bg-white/70 backdrop-blur" required />
@@ -310,7 +341,7 @@
         </div>
       </form>
 
-      <div id="wishList" class="mt-8 space-y-4 max-h-96 overflow-y-auto pr-2">
+      <div id="wishList" data-animate="rise" data-delay="0.18s" class="mt-8 space-y-4 max-h-96 overflow-y-auto pr-2">
         <!-- Pesan tampil di sini -->
       </div>
     </div>
@@ -318,15 +349,15 @@
 
   <!-- ================== GIFTS (Hadiah) ================== -->
   <section id="gifts" class="relative">
-    <div class="mx-auto max-w-3xl px-4 py-16 md:py-24 text-center">
+    <div data-animate="fade-up" class="mx-auto max-w-3xl px-4 py-16 md:py-24 text-center">
       <h3 class="text-2xl md:text-3xl">Hadiah</h3>
       <p class="text-base-500 mt-2">
         Kehadiran Anda sudah merupakan hadiah terindah bagi kami. Namun, jika Anda berkenan memberikan hadiah, berikut nomor rekening kami
       </p>
 
-      <div class="mt-8 grid md:grid-cols-2 gap-6">
+      <div class="mt-8 grid md:grid-cols-2 gap-6" data-animate-stagger="0.12">
         <!-- Card 1 -->
-        <div class="p-6 rounded-xl border border-base-200 bg-white/80 backdrop-blur shadow-soft text-left relative">
+        <div data-animate="zoom-in" class="p-6 rounded-xl border border-base-200 bg-white/80 backdrop-blur shadow-soft text-left relative">
           <div class="text-sm text-base-500">Bank BCA</div>
           <div class="font-semibold text-lg" id="rek1">3770339650</div>
           <div class="text-sm">a.n. Sesil Marsely</div>
@@ -336,7 +367,7 @@
         </div>
 
         <!-- Card 2 -->
-        <div class="p-6 rounded-xl border border-base-200 bg-white/80 backdrop-blur shadow-soft text-left relative">
+        <div data-animate="zoom-in" class="p-6 rounded-xl border border-base-200 bg-white/80 backdrop-blur shadow-soft text-left relative">
           <div class="text-sm text-base-500">Bank BCA</div>
           <div class="font-semibold text-lg" id="rek2">1570236942</div>
           <div class="text-sm">a.n. Ariya Agustian Riyadhi</div>
@@ -390,6 +421,65 @@
     function formatDateLong(iso){
       const d = new Date(iso);
       return d.toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    }
+
+    function initScrollReveal(){
+      const elements = qsa('[data-animate]');
+      if(!elements.length) return;
+
+      const groups = qsa('[data-animate-stagger]');
+      groups.forEach(group => {
+        const step = parseFloat(group.dataset.animateStagger) || 0.1;
+        const start = parseFloat(group.dataset.staggerStart || 0) || 0;
+        const children = Array.from(group.children).filter(child => child.hasAttribute('data-animate'));
+        children.forEach((child, index) => {
+          if(!child.dataset.delay){
+            const delay = (start + index * step).toFixed(2);
+            child.dataset.delay = `${delay}s`;
+          }
+        });
+      });
+
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const showImmediately = () => {
+        elements.forEach(el => {
+          el.classList.add('reveal-visible');
+          el.style.transitionDelay = '0s';
+        });
+      };
+
+      if(mq.matches || !('IntersectionObserver' in window)){
+        showImmediately();
+        return;
+      }
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const el = entry.target;
+          if(entry.isIntersecting){
+            el.style.transitionDelay = el.dataset.delay || '0s';
+            el.classList.add('reveal-visible');
+            if(el.dataset.animateOnce !== 'false'){
+              observer.unobserve(el);
+            }
+          } else if(el.dataset.animateOnce === 'false'){
+            el.classList.remove('reveal-visible');
+          }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+
+      elements.forEach(el => observer.observe(el));
+
+      const mqListener = event => {
+        if(event.matches){
+          showImmediately();
+        }
+      };
+      if(typeof mq.addEventListener === 'function'){
+        mq.addEventListener('change', mqListener);
+      } else if(typeof mq.addListener === 'function'){
+        mq.addListener(mqListener);
+      }
     }
 
     // Ambil parameter ?to=Nama+Tamu
@@ -615,6 +705,7 @@
       initMusicToggle();
       loadWishes();
       startCountdown();
+      initScrollReveal();
 
       // Tombol open selalu siap (tidak menunggu preload)
       const openBtn = qs('#openBtn');
