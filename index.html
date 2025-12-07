@@ -150,7 +150,7 @@
   </div>
 
   <!-- ================== AUDIO / BACKSOUND ================== -->
-  <audio id="bgm" loop preload="auto" crossorigin="anonymous">
+  <audio id="bgm" loop preload="auto">
     <!-- Ganti URL ini dengan lagu Anda (format .mp3) -->
     <source src="public/assets/sampai+jadi+debu.mp3" type="audio/mp3">
     <!-- <source src="public/assets/sampai jadi debu.mp4" type="audio/mpeg"> -->
@@ -196,8 +196,9 @@
       <!-- Cover visual -->
       <div data-animate="float" data-delay="0.15s" class="mt-10 md:mt-14 aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-2xl border border-base-200 shadow-soft">
         <!-- Video sekarang jalan di semua device -->
-        <video id="coverVideo" class="w-full h-full object-cover" playsinline muted loop autoplay preload="auto" crossorigin="anonymous">
-          <source src="public/assets/wedding-video.webm" type="video/webm">
+        <video id="coverVideo" class="w-full h-full object-cover" playsinline muted loop autoplay preload="auto">
+          <source src="public/assets/video.webm" type="video/webm">
+          <!-- <source src="public/assets/wedding-video.webm" type="video/webm"> -->
           <!-- <source src="public/assets/wedding-video.mp4" type="video/mp4"> -->
           Browser Anda tidak mendukung video.
         </video>
@@ -251,7 +252,7 @@
     <div class="mx-auto max-w-5xl px-4 py-16 md:py-24">
       <div class="grid md:grid-cols-2 gap-8 items-center" data-animate-stagger="0.12">
         <div data-animate="fade-right" class="rounded-2xl overflow-hidden border border-base-200 shadow-soft">
-          <img alt="Bride & Groom" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop"/>
+          <img alt="Bride & Groom" class="w-full h-full object-cover" src="public/assets/photos/photo_5_2025-12-07_19-51-39.jpg"/>
         </div>
         <div data-animate="fade-left" class="text-center md:text-left">
           <h3 class="text-2xl md:text-3xl">Tentang Kami</h3>
@@ -307,22 +308,29 @@
   <!-- ================== GALLERY ================== -->
   <section id="gallery" class="relative">
     <div class="mx-auto max-w-5xl px-4 py-16 md:py-24">
-      <h3 data-animate="fade-up" class="text-2xl md:text-3xl text-center">Galeri Foto</h3>
+      <h3 data-animate="fade-up" class="text-2xl md:text-3xl text-center">Galeri</h3>
       <p data-animate="fade-up" data-delay="0.08s" class="text-center text-base-500 mt-2">Potongan kisah kami</p>
       <div id="galleryGrid" class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4" data-animate-stagger="0.06">
         <!-- Ganti sumber gambar sesuai kebutuhan -->
-        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 1"/>
-        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=800&auto=format&fit=crop" alt="galeri 2"/>
-        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=800&auto=format&fit=crop" alt="galeri 3"/>
-        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=800&auto=format&fit=crop" alt="galeri 4"/>
-        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 5"/>
-        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="galeri 6"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_23_2025-12-07_19-51-39.jpg" alt="galeri 1"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_2025-12-07_20-10-53.jpg" alt="galeri 10"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_9_2025-12-07_19-51-39.jpg" alt="galeri 2"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_6_2025-12-07_19-51-39.jpg" alt="galeri 3"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_3_2025-12-07_19-51-39.jpg" alt="galeri 5"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_2025-12-07_20-02-17.jpg" alt="galeri 5"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_8_2025-12-07_19-51-39.jpg" alt="galeri 4"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_2025-12-07_20-02-10.jpg" alt="galeri 6"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_18_2025-12-07_19-51-39.jpg" alt="galeri 6"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_24_2025-12-07_19-51-39.jpg" alt="galeri 7"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_2025-12-07_20-01-43.jpg" alt="galeri 8"/>
+        <img data-animate="zoom-in" class="gallery-img cursor-pointer rounded-xl border border-base-200 object-cover aspect-square" src="public/assets/photos/photo_2025-12-07_20-01-51.jpg" alt="galeri 9"/>
+        
       </div>
     </div>
   </section>
 
   <!-- Lightbox sederhana -->
-  <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/90 p-4 md:p-10">
+  <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/90 p-4 md:p-10 flex items-center justify-center">
     <button id="lightboxClose" class="absolute top-4 right-4 text-white text-2xl">×</button>
     <img id="lightboxImg" class="mx-auto max-h-[90vh] object-contain" src="" alt="preview"/>
   </div>
